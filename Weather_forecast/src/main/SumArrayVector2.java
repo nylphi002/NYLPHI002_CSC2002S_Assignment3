@@ -3,26 +3,24 @@ package main;
 import java.util.concurrent.RecursiveTask;
 
 public class SumArrayVector2 extends RecursiveTask<Vector>  {
-	  int lo; // arguments
+	  int lo;
 	  int hi;
 	  int dimx;
 	  int dimy;
 	  Vector[][][] adv;
-	  static final int SEQUENTIAL_CUTOFF=60000;
-
-	 // Vector ans = 0; // result 
+	  static final int SEQUENTIAL_CUTOFF=1000000;
 	    
 	  SumArrayVector2(Vector[][][] a, int l, int h, int x, int y) { 
 	    lo=l; hi=h; adv=a; dimx = x; dimy = y;
 	  }
 	  
 	  void locate(int pos, int[] ind) {
-			ind[0] = (int) pos / (dimx * dimy); // t
-			ind[1] = (pos % (dimx * dimy)) / dimy; // x
-			ind[2] = pos % (dimy); // y
+			ind[0] = (int) pos / (dimx * dimy);
+			ind[1] = (pos % (dimx * dimy)) / dimy;
+			ind[2] = pos % (dimy);
 		}
 
-	  protected Vector compute() {// return answer - instead of run
+	  protected Vector compute() {
 		if ((hi - lo) < SEQUENTIAL_CUTOFF) {
 			int[] tempArrLo = new int[3];
 			locate(lo, tempArrLo);
@@ -44,9 +42,6 @@ public class SumArrayVector2 extends RecursiveTask<Vector>  {
 		} else {
 			  SumArrayVector2 left = new SumArrayVector2(adv,lo,(hi+lo)/2, dimx, dimy);
 			  SumArrayVector2 right= new SumArrayVector2(adv,(hi+lo)/2,hi,dimx, dimy);
-			  
-			  // order of next 4 lines
-			  // essential – why?
 			  left.fork();
 			  Vector rightAns = right.compute();
 			  Vector leftAns  = left.join();

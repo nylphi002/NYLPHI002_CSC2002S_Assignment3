@@ -2,7 +2,6 @@ package main;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.concurrent.ForkJoinPool;
@@ -29,14 +28,11 @@ private float timer;
 	}
 	
 	Vector [][][] advection; // in-plane regular grid of wind vectors, that evolve over time
-	float [][][] convection;
-	//Vector [] advection; // in-plane regular grid of wind vectors, that evolve over time
-	//float [] convection; // vertical air movement strength, that evolves over time
-	int [] classification; // cloud type per grid point, evolving over time
+	float [][][] convection; // vertical air movement strength, that evolves over time
+	int [] classification; // cloud type per element
 	int dimx, dimy, dimt; // data dimensions
-	//float xT = 0;
-	//float yT = 0;
-	Vector sumVec = new Vector();;
+	Vector sumVec = new Vector();
+	
 	// overall number of elements in the timeline grids
 	int dim(){
 		return dimt*dimx*dimy;
@@ -66,14 +62,6 @@ private float timer;
 			sc.nextLine();
 			
 			// initialize and load advection (wind direction and strength) and convection
-			/*advection = new Vector[dim()];
-			convection = new float[dim()];
-			for(int t = 0; t < dim(); t++) {
-						advection[t] = new Vector();
-						advection[t].x = Float.parseFloat(sc.next());
-						advection[t].y = Float.parseFloat(sc.next());
-						convection[t] = Float.parseFloat(sc.next());
-					}*/
 			advection = new Vector[dimt][dimx][dimy];
 			convection = new float[dimt][dimx][dimy];
 			for(int t = 0; t < dimt; t++)
@@ -101,12 +89,6 @@ private float timer;
 	
 	void countParallel() {
 		System.gc();
-		/*sumVec = sum(advection);
-		sumVec.x = sumVec.x/dim();
-		sumVec.y = sumVec.y/dim();
-		float time1 = tock();
-		timer = time1;
-		System.out.println("(Parallel) Calculate global average took "+ time1 +" seconds");*/
 		timer = 0;
 		tick();
 		classification = classify(advection,convection,dim() - 1,dimx,dimy);
