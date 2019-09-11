@@ -10,7 +10,7 @@ public class Classify extends RecursiveTask<int[]> {
 	Vector[][][] adv;
 	float[][][] conv;
 	int[] classification;
-	static final int SEQUENTIAL_CUTOFF = 1000000;
+	static final int SEQUENTIAL_CUTOFF = 200000;
 
 	Classify(Vector[][][] a, float[][][] c, int l, int h, int x, int y) {
 		lo = l;

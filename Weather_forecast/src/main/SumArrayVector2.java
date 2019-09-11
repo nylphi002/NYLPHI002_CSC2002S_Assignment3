@@ -8,7 +8,7 @@ public class SumArrayVector2 extends RecursiveTask<Vector>  {
 	  int dimx;
 	  int dimy;
 	  Vector[][][] adv;
-	  static final int SEQUENTIAL_CUTOFF=1000000;
+	  static final int SEQUENTIAL_CUTOFF=200000;
 	    
 	  SumArrayVector2(Vector[][][] a, int l, int h, int x, int y) { 
 	    lo=l; hi=h; adv=a; dimx = x; dimy = y;

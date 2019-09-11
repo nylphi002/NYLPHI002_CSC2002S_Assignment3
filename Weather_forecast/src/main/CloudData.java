@@ -76,7 +76,8 @@ private float timer;
 		timer = 0;
 		System.gc();
 		tick();
-		Float[][][] magVec = new Float[dimt][dimx][dimy];
+		//Float[][][] magVec = new Float[dimt][dimx][dimy];
+		float f;
 		for (int t = 0; t < dimt; t++) {
 			for (int x = 0; x < dimx; x++) {
 				for (int y = 0; y < dimy; y++) {
@@ -94,10 +95,11 @@ private float timer;
 							}
 						}
 					}
-					magVec[t][x][y] = (float) Math.sqrt(Math.pow(xAvg/noOf, 2) + Math.pow(yAvg/noOf, 2));
-					if (Math.abs(convection[t][x][y]) > magVec[t][x][y]) {
+					//magVec[t][x][y] = (float) Math.sqrt(Math.pow(xAvg/noOf, 2) + Math.pow(yAvg/noOf, 2));
+					f = (float) Math.sqrt(Math.pow(xAvg/noOf, 2) + Math.pow(yAvg/noOf, 2));
+					if (Math.abs(convection[t][x][y]) > f) {
 						classification[t][x][y] = 0;
-					} else if (Math.abs(convection[t][x][y]) <= magVec[t][x][y] && magVec[t][x][y] > 0.2) {
+					} else if (Math.abs(convection[t][x][y]) <= f && f > 0.2) {
 						classification[t][x][y] = 1;
 					} else {
 						classification[t][x][y] = 2;
