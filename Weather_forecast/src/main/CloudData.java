@@ -8,6 +8,16 @@ import java.util.concurrent.ForkJoinPool;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
+
+/**
+ * CloudData is the class that handles the reading from and writing to files and does the sequential calculation/cloud classification.
+ * <P>
+ * This class also does the specific timing of the calculation part which can be accessed from other classes.
+ * 
+ * @author 		Philip Nylén
+ * @version 	1.5
+ * @since		1.0
+ */
 public class CloudData {
 static long startTime = 0;
 private float timer;
@@ -76,11 +86,11 @@ private float timer;
 		timer = 0;
 		System.gc();
 		tick();
-		//Float[][][] magVec = new Float[dimt][dimx][dimy];
 		float f;
 		for (int t = 0; t < dimt; t++) {
 			for (int x = 0; x < dimx; x++) {
 				for (int y = 0; y < dimy; y++) {
+					//xT,yT is the variables used to calculate prevailing wind
 					xT += advection[t][x][y].x; 
 					yT += advection[t][x][y].y;
 					int noOf = 0;
@@ -88,6 +98,7 @@ private float timer;
 					float yAvg = 0;
 					for (int i = 0; i < 3; i++) {
 						for (int j = 0; j < 3; j++) {
+							//Checks if a specific grid point exists
 							if (x - 1 + i >= 0 && y - 1 + j >= 0 && x - 1 + i < dimx && y - 1 + j < dimy) {
 								xAvg += advection[t][x - 1 + i][y - 1 + j].x;
 								yAvg += advection[t][x - 1 + i][y - 1 + j].y;
@@ -95,8 +106,8 @@ private float timer;
 							}
 						}
 					}
-					//magVec[t][x][y] = (float) Math.sqrt(Math.pow(xAvg/noOf, 2) + Math.pow(yAvg/noOf, 2));
 					f = (float) Math.sqrt(Math.pow(xAvg/noOf, 2) + Math.pow(yAvg/noOf, 2));
+					//The wind magnitude is compared to the absolute uplift to determine the cloud type
 					if (Math.abs(convection[t][x][y]) > f) {
 						classification[t][x][y] = 0;
 					} else if (Math.abs(convection[t][x][y]) <= f && f > 0.2) {

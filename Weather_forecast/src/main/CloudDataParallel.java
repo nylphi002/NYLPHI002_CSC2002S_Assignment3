@@ -7,31 +7,43 @@ import java.util.Scanner;
 import java.util.concurrent.ForkJoinPool;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-
+/**
+ * CloudData is the class that handles the reading from and writing to files and also calls the parallel 
+ * algorithms {@link Classify} and {@link SumArrayVector2} which calculates cloud types and prevailing wind respectively.
+ * <P>
+ * This class also does the specific timing of the calculation part which can be accessed from other classes.
+ * 
+ * @author 		Philip Nylén
+ * @version 	1.5
+ * @since		1.0
+ */
 public class CloudDataParallel {
 static long startTime = 0;
 private float timer;
-	private static void tick(){
-		startTime = System.currentTimeMillis();
-	}
-	private static float tock(){
-		return (System.currentTimeMillis() - startTime) / 1000.0f; 
-	}
-	
-	static final ForkJoinPool fjPool = new ForkJoinPool();
-	static int[] classify(Vector[][][] advection, float[][][] convection, int dim, int dimx, int dimy){
-		  return fjPool.invoke(new Classify(advection, convection,0,dim, dimx, dimy));
-	}
-	static final ForkJoinPool fjPool2 = new ForkJoinPool();
-	static Vector countPrevailing(Vector[][][] advection, float[][][] convection, int dim, int dimx, int dimy){
-		  return fjPool2.invoke(new SumArrayVector2(advection,0,dim, dimx, dimy));
-	}
 	
 	Vector [][][] advection; // in-plane regular grid of wind vectors, that evolve over time
 	float [][][] convection; // vertical air movement strength, that evolves over time
 	int [] classification; // cloud type per element
 	int dimx, dimy, dimt; // data dimensions
-	Vector sumVec = new Vector();
+	Vector sumVec = new Vector();// prevailing wind vector
+	static final ForkJoinPool fjPool = new ForkJoinPool();
+	static final ForkJoinPool fjPool2 = new ForkJoinPool();
+	
+	private static void tick(){
+		startTime = System.currentTimeMillis();
+	}
+	
+	private static float tock(){
+		return (System.currentTimeMillis() - startTime) / 1000.0f; 
+	}
+	
+	static int[] classify(Vector[][][] advection, float[][][] convection, int dim, int dimx, int dimy){
+		  return fjPool.invoke(new Classify(advection, convection,0,dim, dimx, dimy));
+	}
+	
+	static Vector countPrevailing(Vector[][][] advection, float[][][] convection, int dim, int dimx, int dimy){
+		  return fjPool2.invoke(new SumArrayVector2(advection,0,dim, dimx, dimy));
+	}
 	
 	// overall number of elements in the timeline grids
 	int dim(){
@@ -91,7 +103,9 @@ private float timer;
 		System.gc();
 		timer = 0;
 		tick();
+		//Calculates and identifies cloud types
 		classification = classify(advection,convection,dim() - 1,dimx,dimy);
+		//Calculate average wind across all grid and time points
 		sumVec = countPrevailing(advection,convection,dim() - 1,dimx,dimy);
 		sumVec.x = sumVec.x/dim();
 		sumVec.y = sumVec.y/dim();

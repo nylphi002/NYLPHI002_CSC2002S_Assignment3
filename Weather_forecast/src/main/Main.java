@@ -1,17 +1,19 @@
 package main;
 /**
- * Main is the class which is used to run and test both the sequential 
+ * Main is the class used to run and test both the sequential 
  * and parallel program.
  * <P>
- * It uses the class CloudData {@link CloudData} to perform and time sequential operations while 
- * CloudDataParallel {@link CloudDataParallel} is used to run the operations with parallel algorithms.
+ * It uses the class {@link CloudData} to perform and time sequential operations while 
+ * {@link CloudDataParallel} is used to run the operations with parallel algorithms. 
+ * <P>
+ * Block 2 should be surrounded with a block comment to run the program sequential and block 1 surrounded to run it parallel.
  * <P>
  * CloudData and CloudDataParallel are never active at the same time, they are
  * tested separately to avoid corrupt measurements and the first five runs are 
- * not measured.
+ * not measured in both cases.
  * 
  * @author      Philip Nylén
- * @version     %I%, %G%
+ * @version     1.5
  * @since       1.0
  */
 public class Main {
@@ -22,38 +24,40 @@ public class Main {
 	float times = 0;
 	float timeP = 0;
 	int wait = 5;
-
-	public void run() {
+	//Run is the method that runs the program
+	public void run(String[] args) {
 
 		while (true) {
 			times++;
 			System.out.println(times - 5);
-			data = new CloudData();
-			data.readData("input15_30_30.txt");
+			
+			//Block 1 - sequential
+			/*data = new CloudData();
+			data.readData(args[0]);
 			data.count();
-			data.writeData("output15_30_30.txt", new Vector());
-
-			/*dataP = new CloudDataParallel();
-			dataP.readData("input15_30_30.txt");
-			dataP.countParallel();
-			dataP.writeData("output15_30_30.txt", new Vector());*/
+			data.writeData(args[1], new Vector());
 			if (times > wait) {
 				if (time > data.getTimer()) {
 					time = data.getTimer();
 				}
 				System.out.println("(Sequential) Best time: " + time + " seconds");
-				//timeP += dataP.getTimer();
-
-				//System.out.println("(Sequential) All took (average) " + time / (times - 5) + " seconds");
-				
-				//System.out.println("(Parallel wind) All took (average) " + timeP / (times - 5) + " seconds");
+			}*/
+			
+			//Block 2 - parallel
+			dataP = new CloudDataParallel();
+			dataP.readData(args[0]);
+			dataP.countParallel();
+			dataP.writeData(args[1], new Vector());
+			if (times > wait) {
+				timeP += dataP.getTimer();
+				System.out.println("(Parallel wind) All took (average) " + timeP / (times - 5) + " seconds");
 			}
 		}
 
 	}
 
-	public static void main(String[] args) {
-		(new Main()).run();
+	public static void main(String[] args) {	
+		(new Main()).run(args);
 	}
 
 }

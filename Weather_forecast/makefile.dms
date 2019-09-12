@@ -1,0 +1,31 @@
+# Assignment 3 makefile
+# NYLPHI002
+# 10/09/2019
+
+JAVAC = javac
+JFLAGS = -g
+SRC = src/
+DOC = doc/
+BIN = bin/
+JAVADOC = javadoc
+
+.SUFFIXES: .java .class
+
+.java.class:
+	$(JAVAC) -cp .:./bin -d $(BIN) $(JFLAGS) $*.java
+
+CLASSES = \
+	$(SRC)Vector.java\
+	$(SRC)Classify.java\
+	$(SRC)SumArrayVector2.java\
+	$(SRC)CloudDataParallel.java\ 
+	$(SRC)CloudData.java\
+	$(SRC)Main.java 
+
+default: classes
+
+classes: $(CLASSES:.java=.class)
+
+docs: $(JAVADOC) -d $(DOC) $(SRC)*.java
+
+clean: $(RM) $(BIN)*.class
