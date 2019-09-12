@@ -1,8 +1,14 @@
 package main;
 /**
  * Main is the class which is used to run and test both the sequential 
- * and parallel program 
- * 
+ * and parallel program.
+ * <P>
+ * It uses the class CloudData {@link CloudData} to perform and time sequential operations while 
+ * CloudDataParallel {@link CloudDataParallel} is used to run the operations with parallel algorithms.
+ * <P>
+ * CloudData and CloudDataParallel are never active at the same time, they are
+ * tested separately to avoid corrupt measurements and the first five runs are 
+ * not measured.
  * 
  * @author      Philip Nylén
  * @version     %I%, %G%
@@ -23,7 +29,7 @@ public class Main {
 			times++;
 			System.out.println(times - 5);
 			data = new CloudData();
-			data.readData("input2.txt");
+			data.readData("input15_30_30.txt");
 			data.count();
 			data.writeData("output15_30_30.txt", new Vector());
 

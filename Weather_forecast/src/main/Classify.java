@@ -2,6 +2,16 @@ package main;
 
 import java.util.concurrent.RecursiveTask;
 
+/**
+ * 
+ * 
+ * 
+ * 
+ * @author 		Philip Nylén
+ * @version 	%I%, %G%
+ * @since		1.0
+ */
+
 public class Classify extends RecursiveTask<int[]> {
 	int lo;
 	int hi;
